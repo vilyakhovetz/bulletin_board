@@ -1,5 +1,6 @@
 from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
+from users.models import User
 
 
 class Category(MPTTModel):
@@ -20,6 +21,7 @@ class Category(MPTTModel):
 
 
 class Advert(models.Model):
+    author = models.ForeignKey(User, related_name='adverts', on_delete=models.CASCADE, verbose_name='Автор')
     title = models.CharField(max_length=50, verbose_name='Название')
     category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name='Категория')
     content = models.TextField(verbose_name='Содержание')
