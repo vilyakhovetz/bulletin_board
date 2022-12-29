@@ -13,7 +13,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     photo = models.ImageField(upload_to='users_photos/%Y/%m/%d', verbose_name='Фото пользователя', blank=True, null=True)
     is_staff = models.BooleanField(default=False, verbose_name='Персонал')
     is_active = models.BooleanField(default=True, verbose_name='Активные пользователи')
-    date_joined = models.DateTimeField(auto_now_add=True)
+    date_joined = models.DateTimeField(auto_now_add=True, verbose_name='Время регистрации')
 
     USERNAME_FIELD = 'email'
 
@@ -29,7 +29,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     # Explicitly mark a string as safe for (HTML) output purposes.
     def show_photo(self):
-        return format_html(f'<img src="{self.photo.url}" width="200" height="150">') if self.photo else None
+        return format_html(f'<img src="{self.photo.url}" width="150" height="150">') if self.photo else None
 
     show_photo.__name__ = "Предпросмотр"
 

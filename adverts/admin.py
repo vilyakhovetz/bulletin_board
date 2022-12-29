@@ -13,8 +13,9 @@ class CharacteristicValueInline(admin.TabularInline):
 class AdvertAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'category', 'author')
     list_display_links = ('title',)
+    search_fields = ('title', 'author__last_name')
+    ordering = ('title', 'author__last_name')
     inlines = [PhotoInline, CharacteristicValueInline]
-    search_fields = ('title', 'author__email')
 
 
 class CategoryAdmin(admin.ModelAdmin):
