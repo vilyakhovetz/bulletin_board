@@ -1,6 +1,7 @@
 from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
 from users.models import User
+from djmoney.models.fields import MoneyField
 
 
 class Category(MPTTModel):
@@ -25,7 +26,7 @@ class Advert(models.Model):
     title = models.CharField(max_length=50, verbose_name='Название')
     category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name='Категория')
     content = models.TextField(verbose_name='Содержание')
-    price = models.IntegerField(verbose_name='Цена')
+    price = MoneyField(max_digits=10, decimal_places=2, default_currency='RUB', verbose_name='Цена')
     publication_datetime = models.DateTimeField(auto_now_add=True, verbose_name='Время публикации')
     edit_datetime = models.DateTimeField(auto_now=True, verbose_name='Время изменения')
     address = models.CharField(max_length=200, verbose_name='Адрес')
@@ -41,7 +42,7 @@ class Advert(models.Model):
 
 class Photo(models.Model):
     advert = models.ForeignKey(Advert, on_delete=models.CASCADE, related_name='photos', verbose_name='Объявление')
-    image = models.ImageField(upload_to='advert_photo/%Y/%m/%d', verbose_name='Фото к объявлению')
+    image = models.ImageField(upload_to='advert_photos/%Y/%m/%d', verbose_name='Фото к объявлению')
 
     class Meta:
         verbose_name = 'Фото к объявлению'

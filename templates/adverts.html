@@ -1,0 +1,86 @@
+<div class="container text-left">
+    <div class="row row-cols-3 gx-4 gy-2">
+        {% for ad in adverts %}
+        <div class="col">
+            <div class="p-3">
+                <h5><a href="#" class="text-decoration-none">{{ ad.title }}</a></h5>
+                <a href="#">
+                    <div id="{{ ad.id }}" class="carousel slide">
+                        <div class="carousel-inner">
+                            {% for photo in ad.photos.all %}
+                                {% if forloop.first %}
+                                    <div class="carousel-item active">
+                                        <img src="{{ photo.image.url }}" class="d-block w-100 rounded" border="1" style="height:315px">
+                                    </div>
+                                {% else %}
+                                    <div class="carousel-item">
+                                        <img src="{{ photo.image.url }}" class="d-block w-100 rounded" border="1" style="height:315px">
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#{{ ad.id }}" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#{{ ad.id }}" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </a>
+                <b style="font-size:120%">{{ ad.price }}</b>
+                <br>
+                {{ ad.address }}
+                <br>
+                {{ ad.edit_datetime }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% if page_obj.paginator.num_pages > 1 %}
+<nav class="navbar fixed-bottom justify-content-center">
+    <ul class="pagination">
+        <li class="page-item">
+            {% if page_obj.has_previous %}
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            {% else %}
+                <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            {% endif %}
+        </li>
+        {% if not page_obj.has_previous %}
+            <li class="page-item"><a class="page-link active" href="?page={{ page_obj.number }}">{{ page_obj.number }}</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
+            {% if page_obj.paginator.num_pages >= 3 %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number|add:'1' }}">{{ page_obj.next_page_number|add:'1' }}</a></li>
+            {% endif %}
+        {% elif not page_obj.has_next %}
+            {% if page_obj.paginator.num_pages >= 3 %}
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number|add:'-1' }}">{{ page_obj.previous_page_number|add:'-1' }}</a></li>
+            {% endif %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></li>
+            <li class="page-item"><a class="page-link active" href="?page={{ page_obj.number }}">{{ page_obj.number }}</a></li>
+        {% else %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></li>
+            <li class="page-item"><a class="page-link active" href="?page={{ page_obj.number }}">{{ page_obj.number }}</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
+        {% endif %}
+        <li class="page-item">
+            {% if page_obj.has_next %}
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            {% else %}
+                <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            {% endif%}
+        </li>
+    </ul>
+</nav>
+{% endif %}
