@@ -1,4 +1,4 @@
-<div class="container text-left">
+<div class="container text-left" style="padding-top:10px">
     <div class="row row-cols-3 gx-4 gy-2">
         {% for ad in adverts %}
         <div class="col">
@@ -31,7 +31,8 @@
                 </a>
                 <b style="font-size:120%">{{ ad.price }}</b>
                 <br>
-                {{ ad.address }}
+                г. {{ ad.city }},
+                ул. {% if ad.street %}{{ ad.street }}{% endif %}{% if ad.building_number %}, {{ ad.building_number }} {% endif %}
                 <br>
                 {{ ad.edit_datetime }}
             </div>

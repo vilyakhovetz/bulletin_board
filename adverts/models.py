@@ -28,8 +28,10 @@ class Advert(models.Model):
     content = models.TextField(verbose_name='Содержание')
     price = MoneyField(max_digits=10, decimal_places=2, default_currency='RUB', verbose_name='Цена')
     publication_datetime = models.DateTimeField(auto_now_add=True, verbose_name='Время публикации')
-    edit_datetime = models.DateTimeField(auto_now=True, verbose_name='Время изменения')
-    address = models.CharField(max_length=200, verbose_name='Адрес')
+    edit_datetime = models.DateTimeField(auto_now=True, verbose_name='Время последнего изменения')
+    city = models.CharField(max_length=50, verbose_name='Город')
+    street = models.CharField(max_length=50, null=True, blank=True, verbose_name='Улица')
+    building_number = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name='Номер строения')
 
     class Meta:
         verbose_name = 'Объявление'

@@ -9,7 +9,7 @@ class CustomUserAdmin(UserAdmin):
     list_display_links = ('email',)
     list_filter = ('is_staff', 'is_active',)
     fieldsets = (
-        ('Информация', {'fields': ('first_name', 'last_name', 'email', 'phone_number', 'date_joined', 'photo', 'show_photo')}),
+        ('Информация', {'fields': ('first_name', 'last_name', 'email', 'phone_number', 'show_phone', 'date_joined', 'photo', 'show_photo')}),
         ('Права доступа', {'fields': ('is_staff', 'is_active')}),
     )
     add_fieldsets = (
@@ -21,7 +21,7 @@ class CustomUserAdmin(UserAdmin):
     )
     search_fields = ('last_name',)
     ordering = ('last_name',)
-    readonly_fields = ('show_photo', 'date_joined')
+    readonly_fields = ('show_phone', 'show_photo', 'date_joined')
 
 
 admin.site.register(User, CustomUserAdmin)
