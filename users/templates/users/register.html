@@ -1,0 +1,44 @@
+{% extends 'base.html'%}
+
+{% block title %}
+    Регистрация
+{% endblock %}
+
+{% block content %}
+<div class="container text-left" style="padding-top:20px">
+    <div class="row">
+        <div class="col-md-4 offset-md-4">
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="id_first_name" class="form-label">Имя</label>
+                    <input type="text" name="first_name" maxlength="100" required="" id="id_first_name" class="form-control" placeholder="Введите ваше имя">
+                </div>
+                <div class="mb-3">
+                    <label for="id_last_name" class="form-label">Фамилия</label>
+                    <input type="text" name="last_name" maxlength="100" required="" id="id_last_name" class="form-control" placeholder="Введите вашу фамилию">
+                </div>
+                <div class="mb-3">
+                    <label for="id_phone_number" class="form-label">Номер телефона</label>
+                    <input type="text" name="phone_number" maxlength="15" required="" id="id_phone_number" class="form-control" placeholder="Введите номер телефона">
+                </div>
+                <div class="mb-3">
+                    <label for="id_email" class="form-label">E-mail</label>
+                    <input type="email" name="email" required="" id="id_email" class="form-control" placeholder="Введите адрес эл. почты">
+                </div>
+                <div class="mb-3">
+                    <label for="id_password1" class="form-label">Пароль</label>
+                    <input type="password" name="password1" required="" id="id_password1" class="form-control" placeholder="Введите пароль">
+                </div>
+                <div class="mb-3">
+                    <label for="id_password2" class="form-label">Подтверждение пароля</label>
+                    <input type="password" name="password2" required="" id="id_password2" class="form-control" placeholder="Введите пароль повторно">
+                </div>
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">Регистрация</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

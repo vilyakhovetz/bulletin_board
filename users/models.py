@@ -7,8 +7,8 @@ from django.utils.html import format_html
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True, verbose_name='E-mail')
-    first_name = models.CharField(max_length=10, verbose_name='Имя')
-    last_name = models.CharField(max_length=10, verbose_name='Фамилия')
+    first_name = models.CharField(max_length=100, verbose_name='Имя')
+    last_name = models.CharField(max_length=100, verbose_name='Фамилия')
     phone_number = models.CharField(max_length=15, verbose_name='Номер телефона')
     photo = models.ImageField(upload_to='users_photos/%Y/%m/%d', verbose_name='Фото пользователя', blank=True, null=True)
     is_staff = models.BooleanField(default=False, verbose_name='Персонал')
@@ -17,8 +17,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
 
-    # A list of the field names that will be prompted for when creating a user via the createsuperuser management
-    # command.
     REQUIRED_FIELDS = []
 
     objects = UserManager()
@@ -27,7 +25,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
 
-    # Explicitly mark a string as safe for (HTML) output purposes.
     def show_photo(self):
         return format_html(f'<img src="{self.photo.url}" width="150" height="150">') if self.photo else None
 

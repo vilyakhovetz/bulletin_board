@@ -12,7 +12,7 @@
     <body>
         <nav class="navbar navbar-expand-sm navbar-dark bg-primary sticky-top">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Bulletin Board</a>
+                <a class="navbar-brand" href="{% url 'index' %}">Bulletin Board</a>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
@@ -41,12 +41,21 @@
                         </li>
                     </ul>
                     <ul class="nav justify-content-end">
-                        <li class="nav-item">
-                            <a class="btn btn-primary" aria-current="page" href="#">Регистрация</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-primary" aria-current="page" href="#">Вход</a>
-                        </li>
+                        {% if request.user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="btn btn-primary" aria-current="page" href="#">{{ request.user.first_name }} {{ request.user.last_name }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-primary" aria-current="page" href="{% url 'logout' %}">Выйти</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="btn btn-primary" aria-current="page" href="{% url 'register' %}">Регистрация</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-primary" aria-current="page" href="{% url 'login' %}">Вход</a>
+                            </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
