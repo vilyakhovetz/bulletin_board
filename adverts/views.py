@@ -55,3 +55,12 @@ class AdvertDetailView(DetailView):
     model = Advert
     template_name = 'adverts/advert_detail.html'
     context_object_name = 'advert'
+
+
+class MyAdvertsView(ListView):
+    model = Advert
+    template_name = 'adverts/index.html'
+    context_object_name = 'adverts'
+
+    def get_queryset(self):
+        return Advert.objects.filter(author=self.request.user.id)

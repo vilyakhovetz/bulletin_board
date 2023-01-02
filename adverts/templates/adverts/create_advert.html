@@ -19,13 +19,19 @@
                 <ul class="dropdown-menu">
                 {% for category in categories.get_ancestors %}
                     <li><a class="dropdown-item" href="?category={{ category.slug }}"><b>{{ category.name }}</b></a></li>
-                    {% if  category.get_children %}
+                    {% if category.get_children %}
                         {% for child in category.get_children %}
                             <li><a class="dropdown-item" href="?category={{ child.slug }}">- {{ child.name }}</a></li>
                         {% endfor %}
                     {% endif %}
                     {% if not forloop.last %}
                         <li><hr class="dropdown-divider"></li>
+                    {% endif %}
+                {% endfor %}
+                {% for category in categories %}
+                    {% if not category.get_children and not category.get_ancestors %}
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="?category={{ category.slug }}"><b>{{ category.name }}</b></a></li>
                     {% endif %}
                 {% endfor %}
                 </ul>
