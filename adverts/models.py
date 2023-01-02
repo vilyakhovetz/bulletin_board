@@ -24,7 +24,7 @@ class Category(MPTTModel):
 class Advert(models.Model):
     author = models.ForeignKey(User, related_name='adverts', on_delete=models.CASCADE, verbose_name='Автор')
     title = models.CharField(max_length=50, verbose_name='Название')
-    category = models.ForeignKey(Category, on_delete=models.PROTECT, verbose_name='Категория')
+    category = models.ForeignKey(Category, related_name='adverts', on_delete=models.PROTECT, verbose_name='Категория')
     content = models.TextField(verbose_name='Содержание')
     price = MoneyField(max_digits=10, decimal_places=2, default_currency='RUB', verbose_name='Цена')
     publication_datetime = models.DateTimeField(auto_now_add=True, verbose_name='Время публикации')

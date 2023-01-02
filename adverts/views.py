@@ -11,6 +11,14 @@ class AdvertListView(ListView):
     context_object_name = 'adverts'
     paginate_by = 9
 
+    def get_queryset(self):
+        if self.request.GET.get('category'):
+            category_slug = self.request.GET.get('category')
+            selected_category = Category.objects.get(slug=category_slug)
+            return Advert.objects.filter(category=selected_category)
+        else:
+            return Advert.objects.all()
+
 
 @login_required(login_url='/users/login/')
 def adverts_create_view(request):

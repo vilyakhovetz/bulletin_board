@@ -11,6 +11,7 @@
         <link rel="shortcut icon" href="media/favicon.ico" type="image/x-icon">
     </head>
     <body>
+        {% load adverts_tags %}
         <nav class="navbar navbar-expand-sm navbar-dark bg-primary sticky-top">
             <div class="container-fluid">
                 <a class="navbar-brand" href="{% url 'index' %}">Bulletin Board</a>
@@ -20,14 +21,24 @@
                             <div class="dropdown">
                                 <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Категории</button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">1</a></li>
-                                    <li><a class="dropdown-item" href="#">2</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">3</a></li>
-                                    <li><a class="dropdown-item" href="#">4</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">5</a></li>
-                                    <li><a class="dropdown-item" href="#">6</a></li>
+                                {% get_all_categories as categories %}
+                                {% for category in categories.get_ancestors %}
+                                    <li><a class="dropdown-item" href="?category={{ category.slug }}"><b>{{ category.name }}</b></a></li>
+                                    {% if category.get_children %}
+                                        {% for child in category.get_children %}
+                                            <li><a class="dropdown-item" href="?category={{ child.slug }}">- {{ child.name }}</a></li>
+                                        {% endfor %}
+                                    {% endif %}
+                                    {% if not forloop.last %}
+                                        <li><hr class="dropdown-divider"></li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% for category in categories %}
+                                    {% if not category.get_children and not category.get_ancestors %}
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="?category={{ category.slug }}"><b>{{ category.name }}</b></a></li>
+                                    {% endif %}
+                                {% endfor %}
                                 </ul>
                             </div>
                         </li>
