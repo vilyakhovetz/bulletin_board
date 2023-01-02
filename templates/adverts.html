@@ -3,8 +3,8 @@
         {% for ad in adverts %}
         <div class="col">
             <div class="p-3">
-                <h5><a href="#" class="text-decoration-none">{{ ad.title }}</a></h5>
-                <a href="#">
+                <h5><a href="{% url 'advert_detail' ad.id %}" class="text-decoration-none">{{ ad.title }}</a></h5>
+                <a href="{% url 'advert_detail' ad.id %}">
                     <div id="{{ ad.id }}" class="carousel slide">
                         <div class="carousel-inner">
                             {% for photo in ad.photos.all %}

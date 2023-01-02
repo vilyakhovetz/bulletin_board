@@ -1,0 +1,53 @@
+{% extends 'base.html'%}
+
+{% block title %}
+    Добавить объявление
+{% endblock %}
+
+{% block content %}
+<div class="container text-left" style="padding-top:20px">
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <h4>{{ advert.title }}</h4>
+            <div id="{{ advert.id }}" class="carousel slide">
+                <div class="carousel-inner">
+                {% for photo in advert.photos.all %}
+                    {% if forloop.first %}
+                        <div class="carousel-item active">
+                            <img src="{{ photo.image.url }}" class="d-block w-100 rounded" border="1" style="height:315px">
+                        </div>
+                    {% else %}
+                        <div class="carousel-item">
+                            <img src="{{ photo.image.url }}" class="d-block w-100 rounded" border="1" style="height:315px">
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#{{ advert.id }}" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#{{ advert.id }}" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+        <div class="col-4" style="padding-top:32px; padding-left:50px">
+            <h4>{{ advert.price }}</h4>
+            <p>Категория: {{ advert.category.name }}</p>
+            <p style="font-size:110%">{{ advert.content }}</p>
+            {% for value in advert.values.all %}
+                <text style="font-size:110%">{{ value }}</text><br>
+            {% endfor %}
+            <br>
+            <h4>Контактные данные</h4>
+            <text style="font-size:110%">
+                {{ advert.author.first_name}} {{ advert.author.last_name}}<br>
+                {{ advert.author.show_phone}}<br>
+                г. {{ advert.city }}{% if advert.street %}, ул. {{ advert.street }}{% endif %}{% if advert.building_number %}, {{ advert.building_number }} {% endif %}
+            </text>
+        </div>
+    </div>
+</div>
+{% endblock %}

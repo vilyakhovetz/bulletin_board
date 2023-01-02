@@ -1,4 +1,4 @@
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from adverts.models import *
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -43,9 +43,15 @@ def adverts_create_view(request):
                     if request.POST.get(ch.name) != '<не указано>':
                         CharacteristicValue.objects.create(advert=advert, characteristic=ch, value=request.POST.get(ch.name))
 
-                return redirect('index')
+                # return redirect('index')
+                return redirect('advert_detail', pk=advert.id)
         else:
             form = AdvertCreateForm()
             content['form'] = form
-    print(list(request.POST.items()))
     return render(request, 'adverts/create_advert.html', content)
+
+
+class AdvertDetailView(DetailView):
+    model = Advert
+    template_name = 'adverts/advert_detail.html'
+    context_object_name = 'advert'
