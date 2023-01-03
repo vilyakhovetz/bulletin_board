@@ -1,9 +1,10 @@
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, DeleteView
 from adverts.models import *
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from adverts.forms import AdvertCreateForm
+from django.urls import reverse_lazy
 
 
 def adverts_list_view(request):
@@ -109,3 +110,9 @@ def advert_update_view(request, advert_pk):
 
     return render(request, 'adverts/update_advert.html',
                   {'form': form, 'category': category, 'values': values, 'advert': advert})
+
+
+class AdvertDeleteView(DeleteView):
+    model = Advert
+    template_name = 'adverts/delete_advert.html'
+    success_url = reverse_lazy('my_adverts')

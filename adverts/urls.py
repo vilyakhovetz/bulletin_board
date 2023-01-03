@@ -9,4 +9,5 @@ urlpatterns = [
     path('advert/<int:pk>/', AdvertDetailView.as_view(), name='advert_detail'),
     path('my_adverts/', MyAdvertsView.as_view(), name='my_adverts'),
     path('advert/<int:advert_pk>/update/', advert_update_view, name='update_advert'),
+    path('advert/<int:pk>/delete/', AdvertDeleteView.as_view(), name='delete_advert'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

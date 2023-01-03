@@ -1,0 +1,25 @@
+{% extends 'base.html'%}
+
+{% block title %}
+    Вход в учетную запись
+{% endblock %}
+
+{% block content %}
+<div class="container text-left" style="padding-top:20px">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="container text-center">
+                <form method="post" style="padding:20px">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <text style="font-size:110%"> Вы точно хотите удалить объявление "{{ object }}"? </text>
+                    </div>
+                    <div class="mb-3">
+                        <input type="submit" class="btn btn-danger" value="Удалить">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
