@@ -55,7 +55,7 @@
             <br>
             <h4>Контактные данные</h4>
             <text style="font-size:110%">
-                {{ advert.author.first_name}} {{ advert.author.last_name}}<br>
+                <a href="{% url 'profile' advert.author.id %}" style="color:black">{{ advert.author.first_name}} {{ advert.author.last_name}}</a><br>
                 {{ advert.author.show_phone}}<br>
                 г. {{ advert.city }}{% if advert.street %}, ул. {{ advert.street }}{% endif %}{% if advert.building_number %}, {{ advert.building_number }} {% endif %}
             </text>

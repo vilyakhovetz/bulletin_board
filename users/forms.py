@@ -8,29 +8,29 @@ class UserRegisterForm(UserCreationForm):
         label='Имя',
         widget=forms.TextInput(attrs={'class': 'form-control',
                                       'maxlength': '100',
-                                      'placeholder': 'Введите ваше имя',
-                                      'required': True})
+                                      'placeholder': 'Введите ваше имя'}),
+        required=True
     )
     last_name = forms.CharField(
         label='Фамилия',
         widget=forms.TextInput(attrs={'class': 'form-control',
                                       'maxlength': '100',
-                                      'placeholder': 'Введите вашу фамилию',
-                                      'required': True})
+                                      'placeholder': 'Введите вашу фамилию'}),
+        required=True
     )
     phone_number = forms.CharField(
         label='Номер телефона',
         widget=forms.TextInput(attrs={'class': 'form-control',
                                       'maxlength': '10',
                                       'minlength': '10',
-                                      'placeholder': 'Введите номер телефона',
-                                      'required': True})
+                                      'placeholder': 'Введите номер телефона'}),
+        required=True
     )
     email = forms.EmailField(
         label='E-mail',
         widget=forms.EmailInput(attrs={'class': 'form-control',
-                                       'placeholder': 'Введите адрес эл. почты',
-                                       'required': True})
+                                       'placeholder': 'Введите адрес эл. почты'}),
+        required=True
     )
     password1 = forms.CharField(
         label='Пароль',
@@ -61,3 +61,43 @@ class UserLoginForm(AuthenticationForm):
                                           'autocomplete': 'current-password',
                                           'placeholder': 'Введите пароль'}),
     )
+
+
+class UserUpdateForm(forms.Form):
+    first_name = forms.CharField(
+        label='Имя',
+        widget=forms.TextInput(attrs={'class': 'form-control',
+                                      'maxlength': '100',
+                                      'placeholder': 'Введите ваше имя'}),
+        required=True
+    )
+    last_name = forms.CharField(
+        label='Фамилия',
+        widget=forms.TextInput(attrs={'class': 'form-control',
+                                      'maxlength': '100',
+                                      'placeholder': 'Введите вашу фамилию'}),
+        required=True
+    )
+    phone_number = forms.CharField(
+        label='Номер телефона',
+        widget=forms.TextInput(attrs={'class': 'form-control',
+                                      'maxlength': '10',
+                                      'minlength': '10',
+                                      'placeholder': 'Введите номер телефона'}),
+        required=True
+    )
+    email = forms.EmailField(
+        label='E-mail',
+        widget=forms.EmailInput(attrs={'class': 'form-control',
+                                       'placeholder': 'Введите адрес эл. почты'}),
+        required=True
+    )
+    photo = forms.ImageField(
+        label='Изменить фото',
+        widget=forms.FileInput(attrs={'class': 'form-control'}),
+        required=False
+    )
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email', 'phone_number', 'photo')

@@ -1,3 +1,5 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.views.generic import ListView, DetailView, DeleteView
 from adverts.models import *
 from django.core.paginator import Paginator
@@ -65,7 +67,7 @@ class AdvertDetailView(DetailView):
     context_object_name = 'advert'
 
 
-class MyAdvertsView(ListView):
+class MyAdvertsView(ListView, LoginRequiredMixin):
     model = Advert
     template_name = 'adverts/index.html'
     context_object_name = 'adverts'
@@ -74,8 +76,11 @@ class MyAdvertsView(ListView):
         return Advert.objects.filter(author=self.request.user.id)
 
 
+@login_required(login_url='/users/login/')
 def advert_update_view(request, advert_pk):
     advert = Advert.objects.get(pk=advert_pk)
+    if advert.author != request.user:
+        raise PermissionDenied()
     category = advert.category
     values = advert.values.all()
     photos = request.FILES.getlist('photos')
@@ -112,7 +117,13 @@ def advert_update_view(request, advert_pk):
                   {'form': form, 'category': category, 'values': values, 'advert': advert})
 
 
-class AdvertDeleteView(DeleteView):
+class AdvertDeleteView(DeleteView, LoginRequiredMixin):
     model = Advert
     template_name = 'adverts/delete_advert.html'
     success_url = reverse_lazy('my_adverts')
+
+    def dispatch(self, request, *args, **kwargs):
+        advert = self.get_object()
+        if advert.author != request.user:
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)

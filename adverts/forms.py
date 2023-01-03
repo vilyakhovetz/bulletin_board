@@ -11,20 +11,20 @@ class AdvertCreateForm(ModelForm):
         label='Название',
         widget=forms.TextInput(attrs={'class': 'form-control',
                                       'maxlength': '50',
-                                      'placeholder': 'Введите название',
-                                      'required': True})
+                                      'placeholder': 'Введите название'}),
+        required=True
     )
     content = forms.CharField(
         label='Содержание',
         widget=forms.Textarea(attrs={'class': 'form-control',
-                                     'placeholder': 'Введите краткое содержание объявления',
-                                     'required': True})
+                                     'placeholder': 'Введите краткое содержание объявления'}),
+        required=True
     )
     price = forms.IntegerField(
         label='Цена',
         widget=forms.NumberInput(attrs={'class': 'form-control',
-                                        'placeholder': 'Введите цену',
-                                        'required': True})
+                                        'placeholder': 'Введите цену'}),
+        required=True
     )
     city = forms.CharField(
         label='Город',
@@ -37,12 +37,14 @@ class AdvertCreateForm(ModelForm):
         label='Улица',
         widget=forms.TextInput(attrs={'class': 'form-control',
                                       'maxlength': '50',
-                                      'placeholder': 'Введите название улицы'})
+                                      'placeholder': 'Введите название улицы'}),
+        required=False
     )
     building_number = forms.IntegerField(
         label='Номер дома',
         widget=forms.NumberInput(attrs={'class': 'form-control',
-                                        'placeholder': 'Введите номер дома'})
+                                        'placeholder': 'Введите номер дома'}),
+        required=False
     )
 
     class Meta:

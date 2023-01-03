@@ -1,0 +1,32 @@
+{% extends 'base.html'%}
+
+{% block title %}
+    Редактировать профиль
+{% endblock %}
+
+{% block content %}
+<div class="container text-left" style="padding-top:20px">
+    <div class="row">
+        <div class="col-md-4 offset-md-4">
+
+            {% include 'form_errors.html' %}
+
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="mb-3">
+                        <label class="form-label">{{ field.label_tag }}</label>
+                        {{ field }}
+                    </div>
+                {% endfor %}
+                <div class="container text-center">
+                     <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">Обновить</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
