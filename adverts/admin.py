@@ -11,6 +11,10 @@ class CharacteristicValueInline(admin.TabularInline):
 
 
 class AdvertAdmin(admin.ModelAdmin):
+    fieldsets = (
+        (None, {'fields': ('author', 'title', 'category', 'content', 'price', 'show_price', 'city', 'street', 'building_number')}),
+    )
+    readonly_fields = ('show_price',)
     list_display = ('id', 'title', 'category', 'author')
     list_display_links = ('title',)
     search_fields = ('title', 'author__last_name')

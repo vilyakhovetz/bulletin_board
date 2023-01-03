@@ -1,39 +1,40 @@
 from django.views.generic import ListView, DetailView
 from adverts.models import *
+from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from adverts.forms import AdvertCreateForm
 
 
-class AdvertListView(ListView):
-    model = Advert
-    template_name = 'adverts/index.html'
-    context_object_name = 'adverts'
-    paginate_by = 9
-
-    def get_queryset(self):
-        if self.request.GET.get('category'):
-            category_slug = self.request.GET.get('category')
-            selected_category = Category.objects.get(slug=category_slug)
-            return Advert.objects.filter(category=selected_category)
-        else:
-            return Advert.objects.all()
-
-
-@login_required(login_url='/users/login/')
-def adverts_create_view(request):
-    cities = ['Москва', 'Санкт-Петербург', 'Владивосток']
-    categories = Category.objects.all()
-    content = {'categories': categories, 'cities': cities}
+def adverts_list_view(request):
     if request.GET.get('category'):
         category_slug = request.GET.get('category')
         selected_category = Category.objects.get(slug=category_slug)
-        content['selected_category'] = selected_category
+        adverts = Advert.objects.filter(category=selected_category)
+        if selected_category.get_children():
+            for child in selected_category.get_children():
+                adverts = adverts | Advert.objects.filter(category=child)
+    else:
+        adverts = Advert.objects.all()
+    paginator = Paginator(adverts, 9)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'adverts/index.html', {'adverts': adverts, 'page_obj': page_obj})
+
+
+@login_required(login_url='/users/login/')
+def advert_create_view(request):
+    categories = Category.objects.all()
+    context = {'categories': categories}
+    if request.GET.get('category'):
+        category_slug = request.GET.get('category')
+        selected_category = Category.objects.get(slug=category_slug)
+        context['selected_category'] = selected_category
         characteristics = selected_category.characteristics.all()
-        content['characteristics'] = characteristics
+        context['characteristics'] = characteristics
         if request.method == 'POST':
             form = AdvertCreateForm(request.POST)
-            content['form'] = form
+            context['form'] = form
             photos = request.FILES.getlist('photos')
             if form.is_valid():
                 advert = form.save(commit=False)
@@ -48,15 +49,13 @@ def adverts_create_view(request):
                     Photo.objects.create(advert=advert, image='no_image.png')
 
                 for ch in characteristics:
-                    if request.POST.get(ch.name) != '<не указано>':
-                        CharacteristicValue.objects.create(advert=advert, characteristic=ch, value=request.POST.get(ch.name))
+                    CharacteristicValue.objects.create(advert=advert, characteristic=ch, value=request.POST.get(ch.name))
 
-                # return redirect('index')
                 return redirect('advert_detail', pk=advert.id)
         else:
             form = AdvertCreateForm()
-            content['form'] = form
-    return render(request, 'adverts/create_advert.html', content)
+            context['form'] = form
+    return render(request, 'adverts/create_advert.html', context)
 
 
 class AdvertDetailView(DetailView):
@@ -72,3 +71,41 @@ class MyAdvertsView(ListView):
 
     def get_queryset(self):
         return Advert.objects.filter(author=self.request.user.id)
+
+
+def advert_update_view(request, advert_pk):
+    advert = Advert.objects.get(pk=advert_pk)
+    category = advert.category
+    values = advert.values.all()
+    photos = request.FILES.getlist('photos')
+    if request.method == 'POST':
+        form = AdvertCreateForm(request.POST)
+        if form.is_valid():
+            advert.title = form.cleaned_data['title']
+            advert.content = form.cleaned_data['content']
+            advert.price = form.cleaned_data['price']
+            advert.city = form.cleaned_data['city']
+            advert.street = form.cleaned_data['street']
+            advert.building_number = form.cleaned_data['building_number']
+            advert.save()
+
+            for value in values:
+                value.value = request.POST.get(value.characteristic.name)
+                value.save()
+
+            for photo in advert.photos.all():
+                if not request.POST.get(str(photo.id)):
+                    photo.delete()
+
+            for photo in photos:
+                Photo.objects.create(advert=advert, image=photo)
+
+            return redirect('advert_detail', pk=advert.id)
+    else:
+        default_data = {'title': advert.title, 'content': advert.content,
+                        'price': advert.price, 'city': advert.city,
+                        'street': advert.street, 'building_number': advert.building_number}
+        form = AdvertCreateForm(default_data)
+
+    return render(request, 'adverts/update_advert.html',
+                  {'form': form, 'category': category, 'values': values, 'advert': advert})

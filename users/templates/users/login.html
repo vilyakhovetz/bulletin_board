@@ -8,39 +8,24 @@
 <div class="container text-left" style="padding-top:20px">
     <div class="row">
         <div class="col-md-4 offset-md-4">
-            {% if form.errors %}
-                {% for field in form %}
-                    {% for error in field.errors %}
-                        <div class="alert alert-danger">
-                            <strong>{{ error|escape }}</strong>
-                        </div>
-                    {% endfor %}
-                {% endfor %}
-                {% for error in form.non_field_errors %}
-                    <div class="alert alert-danger">
-                        <strong>{{ error|escape }}</strong>
-                    </div>
-                {% endfor %}
-            {% endif %}
+
+            {% include 'form_errors.html' %}
+
             <form action="" method="post">
                 {% csrf_token %}
-                <div class="mb-3">
-                    <label for="id_username" class="form-label">E-mail</label>
-                    <input type="text" name="username" autofocus="" autocomplete="username" required="" id="id_username" aria-describedby="usernameHelp" class="form-control" placeholder="Введите адрес эл. почты">
-                </div>
-                <div class="mb-3">
-                    <label for="id_password" class="form-label">Пароль</label>
-                    <input type="password" name="password" autocomplete="current-password" required="" id="id_password" class="form-control" placeholder="Введите пароль">
-                </div>
-                <div class="mb-3">
-                    <div id="usernameHelp" class="form-text">Еще нет учетной записи? Зарегистрируйтесь <a href="{% url 'register' %}">здесь.</a></div>
-                </div>
+                {% for field in form %}
+                    <div class="mb-3">
+                        <label class="form-label">{{ field.label_tag }}</label>
+                        {{ field }}
+                    </div>
+                {% endfor %}
                 <div class="container text-center">
                     <div class="mb-3">
                         <button type="submit" class="btn btn-primary">Войти</button>
                     </div>
                 </div>
             </form>
+
         </div>
     </div>
 </div>

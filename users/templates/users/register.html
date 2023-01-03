@@ -8,55 +8,34 @@
 <div class="container text-left" style="padding-top:20px">
     <div class="row">
         <div class="col-md-4 offset-md-4">
-            {% if form.errors %}
-                {% for field in form %}
-                    {% for error in field.errors %}
-                        <div class="alert alert-danger">
-                            <strong>{{ error|escape }}</strong>
-                        </div>
-                    {% endfor %}
-                {% endfor %}
-                {% for error in form.non_field_errors %}
-                    <div class="alert alert-danger">
-                        <strong>{{ error|escape }}</strong>
-                    </div>
-                {% endfor %}
-            {% endif %}
+
+            {% include 'form_errors.html' %}
+
             <form action="" method="post">
                 {% csrf_token %}
-                <div class="mb-3">
-                    <label for="id_first_name" class="form-label">Имя</label>
-                    <input type="text" name="first_name" maxlength="100" required="" id="id_first_name" class="form-control" placeholder="Введите ваше имя">
-                </div>
-                <div class="mb-3">
-                    <label for="id_last_name" class="form-label">Фамилия</label>
-                    <input type="text" name="last_name" maxlength="100" required="" id="id_last_name" class="form-control" placeholder="Введите вашу фамилию">
-                </div>
-                <div class="mb-3">
-                    <label for="id_phone_number" class="form-label">Номер телефона</label>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="basic-addon1">+7</span>
-                        <input type="text" class="form-control" placeholder="Введите номер телефона" aria-label="phone_number" aria-describedby="basic-addon1" name="phone_number" maxlength="10" minlength="10" required="" id="id_phone_number">
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label for="id_email" class="form-label">E-mail</label>
-                    <input type="email" name="email" required="" id="id_email" class="form-control" placeholder="Введите адрес эл. почты">
-                </div>
-                <div class="mb-3">
-                    <label for="id_password1" class="form-label">Пароль</label>
-                    <input type="password" name="password1" required="" id="id_password1" class="form-control" placeholder="Введите пароль">
-                </div>
-                <div class="mb-3">
-                    <label for="id_password2" class="form-label">Подтверждение пароля</label>
-                    <input type="password" name="password2" required="" id="id_password2" class="form-control" placeholder="Введите пароль повторно">
-                </div>
+                {% for field in form %}
+                    {% if field == form.phone_number %}
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.phone_number.label_tag }}</label>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">+7</span>
+                                {{ form.phone_number }}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="mb-3">
+                            <label class="form-label">{{ field.label_tag }}</label>
+                            {{ field }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
                 <div class="container text-center">
                     <div class="mb-3">
                         <button type="submit" class="btn btn-primary">Регистрация</button>
                     </div>
                 </div>
             </form>
+
         </div>
     </div>
 </div>

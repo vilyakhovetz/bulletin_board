@@ -42,43 +42,26 @@
 <div class="container text-left" style="padding-top:10px">
     <div class="row">
         <div class="col-md-4 offset-md-4">
-            {% if selected_category %}
+        {% include 'form_errors.html' %}
+        {% if selected_category %}
             <form action="" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                <div class="mb-3">
-                    <label for="id_title" class="form-label">Название</label>
-                    <input type="text" name="title" maxlength="50" required="" id="id_title" class="form-control" placeholder="Введите название">
-                </div>
-                <div class="mb-3">
-                    <label for="id_content" class="form-label">Содержание</label>
-                    <textarea class="form-control" name="content" required="" id="id_content" placeholder="Введите краткое содержание объявления"></textarea>
-                </div>
-                <div class="mb-3">
-                    <label for="id_price_0" class="form-label">Цена</label>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text">&#x20bd;</span>
-                        <input type="number" name="price_0" step="1" required="" id="id_price_0"class="form-control" placeholder="Введите цену">
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label for="id_city" class="form-label">Город</label>
-                    <select class="form-select" name="city" required="" id="id_city">
-                        <option selected disabled>Выберите город</option>
-                        {% for c in cities %}
-                            <option value="{{ c }}">{{ c }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="id_street" class="form-label">Улица</label>
-                    <input type="text" name="street" maxlength="50" id="id_street" class="form-control" placeholder="Введите название улицы">
-                    <div id="streetHelp" class="form-text">*Необязательное поле</div>
-                </div>
-                <div class="mb-3">
-                    <label for="id_building_number" class="form-label">Номер дома</label>
-                    <input type="number" name="building_number" maxlength="50" id="id_building_number" class="form-control" placeholder="Введите номер дома">
-                    <div id="building_numberHelp" class="form-text">*Необязательное поле</div>
-                </div>
+                {% for field in form %}
+                    {% if field == form.price %}
+                        <div class="mb-3">
+                            <label class="form-label">{{ form.price.label_tag }}</label>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1">&#x20bd;</span>
+                                {{ form.price }}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="mb-3">
+                            <label class="form-label">{{ field.label_tag }}</label>
+                            {{ field }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
                 {% for ch in characteristics %}
                 <div class="mb-3">
                     <label class="form-label">{{ ch.name }}</label>
