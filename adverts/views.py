@@ -1,12 +1,19 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.views.generic import ListView, DetailView, DeleteView
+from rest_framework import generics
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
 from adverts.models import *
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from adverts.forms import AdvertCreateForm
 from django.urls import reverse_lazy
+from adverts.permissions import IsAuthorOrReadOnly
+from adverts.serializers import AdvertSerializer
+from rest_framework import permissions
 
 
 def adverts_list_view(request):
@@ -52,7 +59,8 @@ def advert_create_view(request):
                     Photo.objects.create(advert=advert, image='no_image.png')
 
                 for ch in characteristics:
-                    CharacteristicValue.objects.create(advert=advert, characteristic=ch, value=request.POST.get(ch.name))
+                    CharacteristicValue.objects.create(advert=advert, characteristic=ch,
+                                                       value=request.POST.get(ch.name))
 
                 return redirect('advert_detail', pk=advert.id)
         else:
@@ -127,3 +135,26 @@ class AdvertDeleteView(DeleteView, LoginRequiredMixin):
         if advert.author != request.user:
             raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
+
+
+@api_view(['GET'])
+def api_root(request, format=None):
+    return Response({
+        'users': reverse('users_list_api', request=request, format=format),
+        'adverts': reverse('adverts_list_api', request=request, format=format)
+    })
+
+
+class AdvertListAPI(generics.ListCreateAPIView):
+    queryset = Advert.objects.all()
+    serializer_class = AdvertSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
+
+
+class AdvertDetailAPI(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Advert.objects.all()
+    serializer_class = AdvertSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]

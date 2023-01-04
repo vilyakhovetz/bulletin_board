@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
+from django.contrib.auth.forms import PasswordChangeForm
 from django.core.exceptions import PermissionDenied
 from django.views.generic import DetailView
 from users.forms import UserRegisterForm, UserLoginForm, UserUpdateForm
@@ -8,6 +8,8 @@ from django.contrib.auth import login, update_session_auth_hash, logout
 from django.shortcuts import redirect, render
 from django.contrib.auth.views import LoginView
 from users.models import User
+from rest_framework import generics
+from users.serializers import UserSerializer
 
 
 def user_register_view(request):
@@ -70,3 +72,13 @@ def user_change_password_view(request):
     else:
         form = PasswordChangeForm(request.user)
     return render(request, 'users/change_password.html', {'form': form})
+
+
+class UserListAPI(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class UserDetailAPI(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
