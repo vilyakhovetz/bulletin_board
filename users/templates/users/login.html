@@ -13,12 +13,16 @@
 
             <form action="" method="post">
                 {% csrf_token %}
-                {% for field in form %}
-                    <div class="mb-3">
-                        <label class="form-label">{{ field.label_tag }}</label>
-                        {{ field }}
-                    </div>
-                {% endfor %}
+                <div class="mb-3">
+                    <label class="form-label">{{ form.username.label_tag }}</label>
+                    {{ form.username }}
+                    <div class="form-text">Нет учетной записи? Зарегистрируйтесь <a href="{% url 'user_register' %}">здесь</a></div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">{{ form.password.label_tag }}</label>
+                    {{ form.password }}
+                    <div class="form-text"><a href="{% url 'password_reset' %}">Забыли пароль?</a></div>
+                </div>
                 <div class="container text-center">
                     <div class="mb-3">
                         <button type="submit" class="btn btn-primary">Войти</button>

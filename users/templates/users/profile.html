@@ -1,7 +1,7 @@
 {% extends 'base.html'%}
 
 {% block title %}
-    {{ advert.title }}
+    {{ user.first_name }} {{ user.last_name }}
 {% endblock %}
 
 {% block content %}
@@ -12,7 +12,10 @@
                 <img src="{{ user.photo.url }}" class="d-block w-100 rounded" border="1" style="height:250px">
             </div>
             <div class="mb-3">
-                <a href="{% url 'update' user.id %}">Изменить данные</a>
+                <a href="{% url 'user_update' user.id %}">Изменить данные</a>
+            </div>
+            <div class="mb-3">
+                <a href="{% url 'user_change_password' %}">Изменить пароль</a>
             </div>
         </div>
         <div class="col-4" style="padding-left:50px">

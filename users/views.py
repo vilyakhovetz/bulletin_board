@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm
 from django.core.exceptions import PermissionDenied
 from django.views.generic import DetailView
 from users.forms import UserRegisterForm, UserLoginForm, UserUpdateForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth import login
+from django.contrib.auth import login, update_session_auth_hash, logout
 from django.shortcuts import redirect, render
 from django.contrib.auth.views import LoginView
 from users.models import User
@@ -55,3 +56,17 @@ def user_update_view(request, user_id):
                         'photo': request.user.photo}
         form = UserUpdateForm(default_data)
     return render(request, 'users/update_profile.html', {'form': form})
+
+
+@login_required(login_url='/users/login/')
+def user_change_password_view(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            logout(request)
+            return redirect('login')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'users/change_password.html', {'form': form})
